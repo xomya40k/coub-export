@@ -10,13 +10,22 @@ final class Audio
     public const string QUALITY_HIGH = 1;
     
     private string $url;
-    private float $sampleDuration;
+    private ?float $sampleDuration;
     private int $quality;
 
-    private function __construct(string $url, float $sampleDuration, int $quality)
+    private function __construct(string $url, float $sampleDuration = null, int $quality)
     {
-        $this->url= $url;
-        $this->sampleDuration = $sampleDuration;
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $this->url = $url;
+        } else {
+            throw new \InvalidArgumentException('Invalid URL');
+        }
+
+        if (isset($sampleDuration) and $sampleDuration > 0) {
+                $this->sampleDuration = $sampleDuration;
+        } elseif (isset($sampleDuration) and $sampleDuration <= 0) {
+            throw new \InvalidArgumentException('Sample duration must be greater than 0');
+        } 
 
         switch ($quality) {
             case self::QUALITY_HIGH:

@@ -16,9 +16,18 @@ final class Video
 
     private function __construct(string $url, int $width, int $height, int $quality)
     {
-        $this->url = $url;
-        $this->width = $width;
-        $this->height = $height;
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $this->url = $url;
+        } else {
+            throw new \InvalidArgumentException('Invalid URL');
+        }
+
+        if ($width > 0 and $height > 0) {
+            $this->width = $width;
+            $this->height = $height;
+        } else {
+            throw new \InvalidArgumentException('Invalid width or height');
+        }
 
         switch ($quality) {
             case self::QUALITY_HIGH:
