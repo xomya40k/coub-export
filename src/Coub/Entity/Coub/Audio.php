@@ -56,4 +56,14 @@ final class Audio
     {
         return $this->quality;
     }
+
+    public function isQualityHigh(): bool
+    {
+        return $this->quality === self::QUALITY_HIGH;
+    }
+
+    public function isQualityMedium(): bool
+    {
+        return $this->quality === self::QUALITY_MEDIUM;
+    }
 }
