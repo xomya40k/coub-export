@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Entity\Coub;
-
-use DateTimeImmutable ;
+namespace App\Coub\Entity\Coub;
 
 final class Coub
 {
@@ -12,16 +10,27 @@ final class Coub
     private string $url;
     private string $title;
     private VideoCollection $video;
-    private AudioCollection $audio;
+    private ?AudioCollection $audio = null;
 
-    private function __construct(int $id, string $url, string $title, 
+    public function __construct(int $id, string $url, string $title, 
         VideoCollection $video, AudioCollection $audio = null)
     {
         $this->id = $id;
-        $this->url = $url;
+        
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $this->url = $url;
+        } else {
+            throw new \InvalidArgumentException('Invalid URL');
+        }
+        
         $this->title = $title;
         $this->video = $video;
         $this->audio = $audio;
+    }
+
+    public function getId() : int 
+    {
+        return $this->id;    
     }
 
     public function getUrl() : string 
@@ -34,12 +43,12 @@ final class Coub
         return $this->title;
     }
 
-    public function getVideo(): VideoCollection
+    public function getVideo() : VideoCollection
     {
         return $this->video;
     }
 
-    public function getAudio() : ?AudioCollection 
+    public function getAudio() : AudioCollection 
     {
         return $this->audio;    
     }

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Entity\Coub;
+namespace App\Coub\Entity\Coub;
 
 final class AudioCollection
 {
     private array $audioTracks = [];
     
-    private function __construct(array $audioTracks = [])
+    public function __construct(array $audioTracks = [])
     {
         foreach ($audioTracks as $audio) {
             if ($audio instanceof Audio) {
@@ -28,23 +28,23 @@ final class AudioCollection
         $this->audioTracks[$quality] = $audio;
     }
 
-    public function getHighQuality(): ?Audio
+    public function getHighQuality() : ?Audio
     {
         return $this->getByQuality(Audio::QUALITY_HIGH);
     }
 
-    public function getMediumQuality(): ?Audio
+    public function getMediumQuality() : ?Audio
     {
         return $this->getByQuality(Audio::QUALITY_MEDIUM);
     }
 
-    private function has(Audio $audio): bool
+    private function has(Audio $audio) : bool
     {
         $quality = $audio->getQuality();
         return $this->getByQuality($quality) !== null;
     }
 
-    private function getByQuality(int $quality): ?Audio
+    private function getByQuality(int $quality) : ?Audio
     {
         return $this->audioTracks[$quality];
     }

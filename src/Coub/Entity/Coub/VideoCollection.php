@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Entity\Coub;
+namespace App\Coub\Entity\Coub;
 
 final class VideoCollection
 {
     private array $videos = [];
     
-    private function __construct(array $videos = [])
+    public function __construct(array $videos = [])
     {
         foreach ($videos as $video) {
             if ($video instanceof Video) {
@@ -28,23 +28,23 @@ final class VideoCollection
         $this->videos[$quality] = $video;
     }
 
-    public function getHighQuality(): ?Video
+    public function getHighQuality() : ?Video
     {
         return $this->getByQuality(Video::QUALITY_HIGH);
     }
 
-    public function getMediumQuality(): ?Video
+    public function getMediumQuality() : ?Video
     {
         return $this->getByQuality(Video::QUALITY_MEDIUM);
     }
 
-    private function has(Video $video): bool
+    private function has(Video $video) : bool
     {
         $quality = $video->getQuality();
         return $this->getByQuality($quality) !== null;
     }
 
-    private function getByQuality(int $quality): ?Video
+    private function getByQuality(int $quality) : ?Video
     {
         return $this->videos[$quality];
     }

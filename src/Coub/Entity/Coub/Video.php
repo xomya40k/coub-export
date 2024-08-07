@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Entity\Coub;
+namespace App\Coub\Entity\Coub;
 
 final class Video
 {
@@ -14,7 +14,7 @@ final class Video
     private int $height;
     private int $quality;
 
-    private function __construct(string $url, int $width, int $height, int $quality)
+    public function __construct(string $url, int $width, int $height, int $quality)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $this->url = $url;
@@ -44,32 +44,32 @@ final class Video
         }
     }
 
-    public function getUrl(): string
+    public function getUrl() : string
     {
         return $this->url;
     }
 
-    public function getWidth(): int
+    public function getWidth() : int
     {
         return $this->width;
     }
 
-    public function getHeight(): int
+    public function getHeight() : int
     {
         return $this->height;
     }
 
-    public function getQuality(): int
+    public function getQuality() : int
     {
         return $this->quality;
     }
 
-    public function isQualityHigh(): bool
+    public function isQualityHigh() : bool
     {
         return $this->quality === self::QUALITY_HIGH;
     }
 
-    public function isQualityMedium(): bool
+    public function isQualityMedium() : bool
     {
         return $this->quality === self::QUALITY_MEDIUM;
     }

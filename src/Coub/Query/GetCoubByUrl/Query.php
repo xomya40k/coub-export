@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Query\GetCoubByUrl;
+namespace App\Coub\Query\GetCoubByUrl;
 
 final class Query
 {

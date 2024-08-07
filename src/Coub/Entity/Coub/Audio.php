@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Entity\Coub;
+namespace App\Coub\Entity\Coub;
 
 final class Audio
 {
-    public const string QUALITY_MEDIUM = 0;
-    public const string QUALITY_HIGH = 1;
+    public const int QUALITY_MEDIUM = 0;
+    public const int QUALITY_HIGH = 1;
     
     private string $url;
     private ?float $sampleDuration;
     private int $quality;
 
-    private function __construct(string $url, float $sampleDuration = null, int $quality)
+    public function __construct(string $url, float $sampleDuration = null, int $quality)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $this->url = $url;
@@ -42,27 +42,27 @@ final class Audio
         }
     }
 
-    public function getUrl(): string
+    public function getUrl() : string
     {
         return $this->url;
     }
 
-    public function getDuration(): ?float
+    public function getDuration() : ?float
     {
         return $this->sampleDuration;
     }
 
-    public function getQuality(): int
+    public function getQuality() : int
     {
         return $this->quality;
     }
 
-    public function isQualityHigh(): bool
+    public function isQualityHigh() : bool
     {
         return $this->quality === self::QUALITY_HIGH;
     }
 
-    public function isQualityMedium(): bool
+    public function isQualityMedium() : bool
     {
         return $this->quality === self::QUALITY_MEDIUM;
     }

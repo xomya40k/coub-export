@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CoubExport\Query\GetCoubByUrl;
+namespace App\Coub\Query\GetCoubByUrl;
 
 use GuzzleHttp\ClientInterface;
 
@@ -12,7 +12,7 @@ final class Fetcher
     {
     }
 
-    public function fetch(Query $query): ?Coub
+    public function fetch(Query $query) : ?Coub
     {
         $response = $this->client->request('GET', $this->apiUrl . $query->permaLink);
         $statusCode = $response->getStatusCode();
