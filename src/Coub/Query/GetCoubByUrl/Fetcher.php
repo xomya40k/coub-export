@@ -26,12 +26,13 @@ final class Fetcher
         $jsonData = $response->getBody()->getContents();
         $data = json_decode($jsonData, true);
 
-        $videoUrls = $data['file_versions']['html5']['video'];
-        $audioUrls = $data['file_versions']['html5']['audio'];
+        $video = $data['file_versions']['html5']['video'];
+        $audio = $data['file_versions']['html5']['audio'];
 
         $coub = new Coub($query->permaLink, $data['id'], $data['title'], 
-            $videoUrls['high']['url'], $videoUrls['med']['url'],
-            $audioUrls['high']['url'], $audioUrls['med']['url']);
+            $video['high']['url'], $video['med']['url'],
+            $audio['high']['url'], $audio['med']['url'],
+            $audio['sample_duration']);
 
         return $coub;
     }
