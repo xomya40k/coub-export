@@ -1,11 +1,11 @@
 {
-    "name": "xomya40k/coub_export",
+    "name": "xomya40k/coub-export",
     "description": "Package for exporting coubs as simple videos",
     "type": "library",
     "license": "GNU GPLv2",
     "autoload": {
         "psr-4": {
-            "Xomya40k\\CoubExport\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
