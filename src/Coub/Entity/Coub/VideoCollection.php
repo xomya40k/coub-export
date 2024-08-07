@@ -19,7 +19,7 @@ final class VideoCollection
         }
     }
 
-    public function add(Video $video)
+    private function add(Video $video)
     {
         if ($this->has($video)) {
             throw new \DomainException('Video with same quality already exists.');
