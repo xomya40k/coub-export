@@ -28,12 +28,6 @@ final class AudioCollection
         $this->audioTracks[$quality] = $audio;
     }
 
-    public function has(Audio $audio): bool
-    {
-        $quality = $audio->getQuality();
-        return $this->getByQuality($quality) !== null;
-    }
-
     public function getHighQuality(): ?Audio
     {
         return $this->getByQuality(Audio::QUALITY_HIGH);
@@ -44,23 +38,14 @@ final class AudioCollection
         return $this->getByQuality(Audio::QUALITY_MEDIUM);
     }
 
-    public function removeHighQuality()
+    private function has(Audio $audio): bool
     {
-        $this->removeByQuality(Audio::QUALITY_HIGH);    
-    }
-
-    public function removeMediumQuality()
-    {
-        $this->removeByQuality(Audio::QUALITY_MEDIUM);    
+        $quality = $audio->getQuality();
+        return $this->getByQuality($quality) !== null;
     }
 
     private function getByQuality(int $quality): ?Audio
     {
         return $this->audioTracks[$quality];
-    }
-
-    private function removeByQuality(int $quality)
-    {
-        unset($this->audioTracks[$quality]);
     }
 }

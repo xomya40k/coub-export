@@ -28,12 +28,6 @@ final class VideoCollection
         $this->videos[$quality] = $video;
     }
 
-    public function has(Video $video): bool
-    {
-        $quality = $video->getQuality();
-        return $this->getByQuality($quality) !== null;
-    }
-
     public function getHighQuality(): ?Video
     {
         return $this->getByQuality(Video::QUALITY_HIGH);
@@ -44,23 +38,14 @@ final class VideoCollection
         return $this->getByQuality(Video::QUALITY_MEDIUM);
     }
 
-    public function removeHighQuality()
+    private function has(Video $video): bool
     {
-        $this->removeByQuality(Video::QUALITY_HIGH);    
-    }
-
-    public function removeMediumQuality()
-    {
-        $this->removeByQuality(Video::QUALITY_MEDIUM);    
+        $quality = $video->getQuality();
+        return $this->getByQuality($quality) !== null;
     }
 
     private function getByQuality(int $quality): ?Video
     {
         return $this->videos[$quality];
-    }
-
-    private function removeByQuality(int $quality)
-    {
-        unset($this->videos[$quality]);
     }
 }
