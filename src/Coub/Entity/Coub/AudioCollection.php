@@ -19,7 +19,7 @@ final class AudioCollection
         }
     }
 
-    public function add(Audio $audio)
+    private function add(Audio $audio)
     {
         if ($this->has($audio)) {
             throw new \DomainException('Audio with same quality already exists.');
