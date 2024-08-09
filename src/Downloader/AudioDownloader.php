@@ -8,7 +8,8 @@ use FFMpeg\FFMpeg;
 use FFMpeg\Media\Audio;
 use FFMpeg\Media\Video;
 
-final class AudioDownloader {
+final class AudioDownloader 
+{
 
     public function __construct(private FFMpeg $ffmpeg) 
     {
