@@ -8,6 +8,7 @@ use App\Downloader\AudioDownloader;
 use FFMpeg\FFMpeg;
 use FFMpeg\Media\Audio;
 use FFMpeg\Media\Video;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 use InvalidArgumentException;
 use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,13 +22,22 @@ final class AudioDownloaderTest extends TestCase
 {
     function testSuccess() : void
     {
+        $savePath = 'savePath';
+        $fileName = 'audio_file.mp3';
         $ffmpegMock = $this->createMock(FFMpeg::class);
         $audioMock = $this->createMock(Audio::class);
+        $tempDirectoryMock = $this->createMock(TemporaryDirectory::class);
         $ffmpegMock->method('open')
             ->willReturn($audioMock);
+        $audioMock->method('getTemporaryDirectory')
+            ->willReturn($tempDirectoryMock);
+        $tempDirectoryMock->method('create')
+            ->willReturn($tempDirectoryMock);
+        $tempDirectoryMock->method('path')
+            ->willReturn($savePath);
 
         $audioDownloader = new AudioDownloader($ffmpegMock);
-        $this->assertEquals($audioMock, $audioDownloader->download('http://host/audio_file.mp3'));
+        $this->assertEquals($savePath . '\\' . $fileName, $audioDownloader->download('http://host/' . $fileName));
     }
 
     function testInvalidUrl() : void

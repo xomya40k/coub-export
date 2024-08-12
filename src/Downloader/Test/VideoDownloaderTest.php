@@ -8,6 +8,7 @@ use App\Downloader\VideoDownloader;
 use FFMpeg\FFMpeg;
 use FFMpeg\Media\Audio;
 use FFMpeg\Media\Video;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 use InvalidArgumentException;
 use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -20,14 +21,23 @@ use PHPUnit\Framework\TestCase;
 final class VideoDownloaderTest extends TestCase
 {
     function testSuccess() : void
-    {
+    {   
+        $savePath = 'savePath';
+        $fileName = 'video_file.mp4';
         $ffmpegMock = $this->createMock(FFMpeg::class);
         $videoMock = $this->createMock(Video::class);
+        $tempDirectoryMock = $this->createMock(TemporaryDirectory::class);
         $ffmpegMock->method('open')
             ->willReturn($videoMock);
+        $videoMock->method('getTemporaryDirectory')
+            ->willReturn($tempDirectoryMock);
+        $tempDirectoryMock->method('create')
+            ->willReturn($tempDirectoryMock);
+        $tempDirectoryMock->method('path')
+            ->willReturn($savePath);
 
         $videoDownloader = new VideoDownloader($ffmpegMock);
-        $this->assertEquals($videoMock, $videoDownloader->download('http://host/video_file.mp4'));
+        $this->assertEquals($savePath . '\\' . $fileName, $videoDownloader->download('http://host/' . $fileName));
     }
 
     function testInvalidUrl() : void

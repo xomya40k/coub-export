@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Downloader;
 
 use FFMpeg\FFMpeg;
-use FFMpeg\Media\Audio;
 use FFMpeg\Media\Video;
+use FFMpeg\Format\Audio\Aac;
 
 final class AudioDownloader 
 {
@@ -15,12 +15,12 @@ final class AudioDownloader
     {
     }
 
-    public function download(string $url) : ?Audio
+    public function download(string $url) : string
     {
-        $audio = null;
-
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('Invalid URL');
+        } else {
+            $fileName = basename($url);
         }
 
         try {
@@ -33,8 +33,12 @@ final class AudioDownloader
 
         if ($audio instanceof Video) {
             throw new \RuntimeException('Expected audio file, got video');
+        } else {
+            $tempPath = $audio->getTemporaryDirectory()->create()->path();
+            $fullPath = $tempPath . "\\" . $fileName;
+            $audio->save(new Aac(), $fullPath);
         }
 
-        return $audio;
+        return $fullPath;
     }
 }
