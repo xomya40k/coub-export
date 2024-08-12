@@ -10,23 +10,14 @@ final class Video
     public const int QUALITY_HIGH = 1;
 
     private string $url;
-    private int $width;
-    private int $height;
     private int $quality;
 
-    public function __construct(string $url, int $width, int $height, int $quality)
+    public function __construct(string $url, int $quality)
     {
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $this->url = $url;
         } else {
             throw new \InvalidArgumentException('Invalid URL');
-        }
-
-        if ($width > 0 and $height > 0) {
-            $this->width = $width;
-            $this->height = $height;
-        } else {
-            throw new \InvalidArgumentException('Invalid width or height');
         }
 
         switch ($quality) {
@@ -47,16 +38,6 @@ final class Video
     public function getUrl() : string
     {
         return $this->url;
-    }
-
-    public function getWidth() : int
-    {
-        return $this->width;
-    }
-
-    public function getHeight() : int
-    {
-        return $this->height;
     }
 
     public function getQuality() : int
