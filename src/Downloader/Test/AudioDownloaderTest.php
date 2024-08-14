@@ -20,7 +20,40 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(AudioDownloader::class)]
 final class AudioDownloaderTest extends TestCase
 {
-    function testSuccess() : void
+    private $ffmpegMock;
+    private $videoMock;
+    private $audioMock;
+    private $temporaryDirectoryMock;
+
+    protected function setUp() : void
+    {
+        $this->ffmpegMock = $this->createMock(FFMpeg::class);
+        $this->videoMock = $this->createMock(Video::class);
+        $this->audioMock = $this->createMock(Audio::class);
+        $this->temporaryDirectoryMock = $this->createMock(TemporaryDirectory::class);
+        
+        $this->ffmpegMock->method('open')
+            ->willReturnCallback(function ($filePath) {
+                if (pathinfo($filePath, PATHINFO_EXTENSION) === 'mp4') {
+                    return $this->videoMock;
+                } elseif (pathinfo($filePath, PATHINFO_EXTENSION) === 'mp3') {
+                    return $this->audioMock;
+                } else {
+                    throw new InvalidArgumentException();
+                }
+            }
+        );
+
+        $this->audioMock->method('getTemporaryDirectory')
+            ->willReturn($this->temporaryDirectoryMock);
+        
+        $this->temporaryDirectoryMock->method('create')
+            ->willReturnSelf();
+        $this->temporaryDirectoryMock->method('path')
+            ->willReturn('savePath');
+    }
+
+    public function testSuccess() : void
     {
         $savePath = 'savePath';
         $fileName = 'audio_file.mp3';
@@ -37,41 +70,31 @@ final class AudioDownloaderTest extends TestCase
             ->willReturn($savePath);
 
         $audioDownloader = new AudioDownloader($ffmpegMock);
-        $this->assertEquals($savePath . '\\' . $fileName, $audioDownloader->download('http://host/' . $fileName));
+        $this->assertEquals($savePath . DIRECTORY_SEPARATOR . $fileName, 
+            $audioDownloader->download('http://host/' . $fileName));
     }
 
-    function testInvalidUrl() : void
+    public function testInvalidUrl() : void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid URL');
 
-        $ffmpegMock = $this->createMock(FFMpeg::class);
-
-        (new AudioDownloader($ffmpegMock))->download('not url');
+        (new AudioDownloader($this->ffmpegMock))->download('not url');
     }
 
-    function testInvalidFile() : void
+    public function testInvalidFile() : void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Unsupported file format');
 
-        $ffmpegMock = $this->createMock(FFMpeg::class);
-        $ffmpegMock->method('open')
-            ->will($this->throwException(new InvalidArgumentException));
-
-        (new AudioDownloader($ffmpegMock))->download('http://host/text_file.txt');
+        (new AudioDownloader($this->ffmpegMock))->download('http://host/text_file.txt');
     }
 
-    function testUnexpectedVideoFile() : void
+    public function testUnexpectedVideoFile() : void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Expected audio file, got video');
 
-        $ffmpegMock = $this->createMock(FFMpeg::class);
-        $videoMock = $this->createMock(Video::class);
-        $ffmpegMock->method('open')
-            ->willReturn($videoMock);
-
-        (new AudioDownloader($ffmpegMock))->download('http://host/video_file.mp4');
+        (new AudioDownloader($this->ffmpegMock))->download('http://host/video_file.mp4');
     }
 }
