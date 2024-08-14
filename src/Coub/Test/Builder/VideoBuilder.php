@@ -12,15 +12,11 @@ final class VideoBuilder
     public const int QUALITY_HIGH = 1;
 
     private string $url;
-    private int $width;
-    private int $height;
     private int $quality;
 
     public function __construct()
     {
         $this->url = 'https://selcdn.net/coub_storage/coub/simple/cw_file/muted_big.mp4';
-        $this->width = 1280;
-        $this->height = 720;
         $this->quality = Video::QUALITY_HIGH;
     }
 
@@ -28,20 +24,6 @@ final class VideoBuilder
     {
         $clone = clone $this;
         $clone->url = $url;
-        return $clone;
-    }
-
-    public function withWidth(int $width) : self
-    {
-        $clone = clone $this;
-        $clone->width = $width;
-        return $clone;
-    }
-
-    public function withHeight(int $height) : self
-    {
-        $clone = clone $this;
-        $clone->height = $height;
         return $clone;
     }
 
@@ -56,8 +38,6 @@ final class VideoBuilder
     {
         return new Video(
             $this->url,
-            $this->width,
-            $this->height,
             $this->quality
         );
     }

@@ -55,18 +55,4 @@ final class VideoTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         new Video('not url', Video::QUALITY_HIGH);
     }
-
-    public function testIncorrectWidth(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Video('https://selcdn.net/coub_storage/coub/simple/cw_file/muted_big.mp4',
-            Video::QUALITY_HIGH);
-    }
-
-    public function testIncorrectHeight(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Video('https://selcdn.net/coub_storage/coub/simple/cw_file/muted_big.mp4',
-            Video::QUALITY_HIGH);
-    }
 }
